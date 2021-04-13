@@ -23,12 +23,12 @@ tests = [
 
 	{'description': 'PINA=0x01',
     'steps': [ {'inputs': [('PINA',0x01)], 'iterations': 1 } ],
-    'expected': [('PORTB',0x00)],
+    'expected': [('PORTB',0x01)],
     },
 
 	{'description': 'PINA=0x02',
     'steps': [ {'inputs': [('PINA',0x02)], 'iterations': 1 } ],
-    'expected': [('PORTB',0x01)],
+    'expected': [('PORTB',0x00)],
     },
 
 	{'description': 'PINA=0x03',

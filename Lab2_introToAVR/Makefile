@@ -2,7 +2,7 @@
 # CS120B Makefile
 MMCU=atmega1284
 FREQ=8000000
-
+GDB=/gdb
 PATHB=build/
 PATHO=$(PATHB)objects/
 PATHS=source/

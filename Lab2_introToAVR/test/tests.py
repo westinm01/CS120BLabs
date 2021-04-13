@@ -17,24 +17,44 @@
 tests = [
 
 	{'description': 'PINA=0x00',
-    'steps': [ {'inputs': [('PINA',0x00)], 'iterations': 1 } ],
-    'expected': [('PORTB',0x00)],
+    'steps': [ {'inputs': [('PINA',0x00)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x04)],
     },
 
 	{'description': 'PINA=0x01',
-    'steps': [ {'inputs': [('PINA',0x01)], 'iterations': 1 } ],
-    'expected': [('PORTB',0x00)],
+    'steps': [ {'inputs': [('PINA',0x01)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x03)],
     },
 
 	{'description': 'PINA=0x02',
-    'steps': [ {'inputs': [('PINA',0x02)], 'iterations': 1 } ],
-    'expected': [('PORTB',0x01)],
+    'steps': [ {'inputs': [('PINA',0x02)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x03)],
     },
 
 	{'description': 'PINA=0x03',
-    'steps': [ {'inputs': [('PINA',0x03)], 'iterations': 1 } ],
-    'expected': [('PORTB',0x00)],
+    'steps': [ {'inputs': [('PINA',0x03)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x02)],
+    },
+
+	{'description': 'PINA=0x04',
+    'steps': [ {'inputs': [('PINA',0x04)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x03)],
+    },
+
+	{'description': 'PINA=0x08',
+    'steps': [ {'inputs': [('PINA',0x08)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x03)],
+    },
+	{'description': 'PINA=0x0E',
+    'steps': [ {'inputs': [('PINA',0x0E)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x01)],
+    },
+
+	{'description': 'PINA=0x0F',
+    'steps': [ {'inputs': [('PINA',0x0F)], 'iterations': 5 } ],
+    'expected': [('PORTC',0x00)],
     }
+
   #  {'description': 'This test will run second.',
    # 'steps': [ {'inputs': [('PINA', 0x00)],'iterations': 1}, # Set PIN to val then run one iteration
     #    {'inputs': [('PINA',0x01)], 'time': 300 }, # Set PIN to val then run 300 ms

@@ -35,28 +35,19 @@ int main(void){
 		else{
 			PORTB=0x00;
 		}*/
-		 unsigned char car1;
-        unsigned char car2;
-        unsigned char car3;
-        unsigned char car4;
-        unsigned char avail=0x04;
-		car1=PINA & 0x01;
-		car2=PINA & 0x02;
-		car3=PINA & 0x04;
-		car4=PINA & 0x08;
-		if(car1>=0){
-			avail=avail-1;
+		unsigned char aTemp=PINA;
+		unsigned char cntavail=0x00;
+		unsigned char i;
+		for(i=0;i<4;i++){
+
+			if(!(aTemp & 0x01)){
+				cntavail++;
+			}
+			aTemp=aTemp>>1;
 		}
-		if(car2>=0){
-			avail=avail-1;
-		}
-		if(car3>=0){
-                        avail=avail-1;
-                }
-		if(car4>=0){
-                        avail=avail-1;
-                }
-		PORTC=avail;
+
+		PORTC=cntavail;
+
 	}
 	return 1;
 }

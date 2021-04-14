@@ -12,29 +12,52 @@
 #include "simAVRHeader.h"
 #endif
 
-enum STATES {on0,on1} state;
+enum STATES {on0A, on0B,on1A, on1B} state;
 
 void TickFct(){
 	switch(state){
-		case on0:
+		case on0A:
 			if(PINA & 0x01){
-				state=on1;
+				state=on0A;
+			}
+			else{
+				state=on0B;
 			}
 		break;
-		case on1:
+		case on0B:
 			if(PINA & 0x01){
-				state=on0;
+				state=on1A;
+			}
+			else{
+				state=on0B;
+			}
+		break;	
+		case on1A:
+			if(PINA & 0x01){
+				state=on1A;
+			}
+			else{
+				state=on1B;
 			}
 		break;
+		case on1B:
+			if(PINA & 0x01){
+				state=on0A;
+			}
+			else{
+				state=on1B;
+		}
 		default:
-			state=on0;
+			state=on0B;
 		break;
 	}
 	switch(state){
-		case on0:
+		case on0A:
+		case on0B:
 			PORTB=0x01;
 		break;
-		case on1:
+		case on1A:
+		case on1B:
 			PORTB=0x02;
 		break;
 		default:
@@ -45,10 +68,10 @@ void TickFct(){
 
 int main(void) {
     /* Insert DDR and PORT initializations */
-	DDRA=0xFF; PORTA=0x00;
-	DDRB=0x00; PORTB=0xFF;
+	DDRA=0x00; PORTA=0xFF;
+	DDRB=0xFF; PORTB=0x00;
 	
-	state= on0;
+	state= on0B;
     /* Insert your solution below */
     while (1) {
 	TickFct();

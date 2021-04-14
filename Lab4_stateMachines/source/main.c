@@ -46,7 +46,8 @@ void TickFct(){
 			}
 			else{
 				state=on1B;
-		}
+			}
+		break;
 		default:
 			state=on0B;
 		break;

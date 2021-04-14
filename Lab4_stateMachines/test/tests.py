@@ -18,6 +18,17 @@ tests = [ #{'description': 'This test will run first.',
     #'steps': [ {'inputs': [('PINA',<val>)], 'iterations': 1 } ],
     #'expected': [('PORT',<val>)],
     #},
+	 {'description': 'A=0x00, A=0x01, A=0x00, A=0x01, A=0x00 ==> PORTB: 0x01',
+    'steps': [ {'inputs': [('PINA',0x00 )],'iterations': 1}, # Set PIN to val then run one iteration
+        {'inputs': [('PINA',0x01)], 'iterations': 1}, # Set PIN to val then run 300 ms
+        {'inputs': [('PINA',0x01)], 'iterations': 1},
+	{'inputs': [('PINA',0x00)], 'iterations': 1},
+	{'inputs': [('PINA',0x01)], 'iterations': 1}],
+    'expected': [('PORTB',0x01)],
+    },
+
+
+
     {'description': 'A=0x00, A=0x01, A0x00 ==> PORTB: 0x02',
     'steps': [ {'inputs': [('PINA',0x00 )],'iterations': 1}, # Set PIN to val then run one iteration
         {'inputs': [('PINA',0x01)], 'iterations': 1}, # Set PIN to val then run 300 ms

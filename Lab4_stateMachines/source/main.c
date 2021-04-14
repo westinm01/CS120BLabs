@@ -12,54 +12,114 @@
 #include "simAVRHeader.h"
 #endif
 
-enum STATES {on0A, on0B,on1A, on1B} state;
+enum STATES {init, inc, dec, wait, max, reset} state;
+
+unsigned char PA0;
+unsigned char PA1;
 
 void TickFct(){
 	switch(state){
-		case on0A:
-			if(PINA & 0x01){
-				state=on0A;
+		case init:
+			if(PA0 && !PA1){
+				state=inc;
+			}
+			else if (!PA0 && PA1){
+				state=dec;
 			}
 			else{
-				state=on0B;
+				state=init;
 			}
 		break;
-		case on0B:
-			if(PINA & 0x01){
-				state=on1A;
+		case inc:
+			if(PINC==0x09){
+				state=max;
+			}
+			else if (PA0 && !PA1){
+				state=inc;
+			}
+			else if(PA0 && PA1){
+				state=reset;
+			}
+			else if(!PA0 && PA1){
+				state=dec;
 			}
 			else{
-				state=on0B;
+				state=wait;
 			}
 		break;	
-		case on1A:
-			if(PINA & 0x01){
-				state=on1A;
+		case dec:
+			if(PINC==0x00 || (PA0 && PA1)){
+				state=reset;
+			}
+			else if (PA0 && !PA1){
+				state=inc;
+			}
+			else if(!PA0 && PA1){
+				state=dec;
 			}
 			else{
-				state=on1B;
+				state=wait;
 			}
 		break;
-		case on1B:
-			if(PINA & 0x01){
-				state=on0A;
+		case wait:
+			if(PA0 && PA1){
+				state=reset;
+			}
+			else if(PA0&&!PA1){
+				state=inc;
+			}
+			else if(!PA0 && PA1){
+				state=dec;
 			}
 			else{
-				state=on1B;
+				state=wait;
+			}
+		break;
+		case max:
+			if(!PA0 && PA1){
+				state=dec;
+			}
+			if(PA0 && PA1){
+				state=reset;
+			}
+			else{
+				state=max;
+			}
+		break;
+		case reset:
+			if(PA0 && !PA1){
+				state=inc;
+			}
+			else{
+				state=reset;
 			}
 		break;
 		default:
-			state=on0B;
+			state=init;
 		break;
 	}
 	switch(state){
-		case on0A:
-		case on0B:
-			PORTB=0x01;
+		case init:
+			PORTC=0x07;
 		break;
-		case on1A:
-		case on1B:
-			PORTB=0x02;
+		case inc:
+			if(PINC<0x09){
+				PORTC=PINC+1;
+			}
+		break;
+		case dec:
+			if(PINC>0x00){
+				PORTC=PINC-1;
+			}
+		break;
+		case wait:
+			PORTC=PINC;
+		break;
+		case max:
+			PORTC=9;
+		break;
+		case reset:
+			PORTC=0;
 		break;
 		default:
 		break;
@@ -70,11 +130,12 @@ void TickFct(){
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA=0x00; PORTA=0xFF;
-	DDRB=0xFF; PORTB=0x00;
-	
-	state= on0B;
+	DDRC=0xFF; PORTC=0x00;	
+	state= init;
     /* Insert your solution below */
     while (1) {
+	PA0=PINA & 0x01;
+	PA1=PINA & 0x02;
 	TickFct();
     }
     return 1;

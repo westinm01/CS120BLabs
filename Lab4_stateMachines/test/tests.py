@@ -62,11 +62,11 @@ tests = [ #{'description': 'This test will run first.',
  {'description': 'A=0x00, A=0x01, A=0x01 ==> PORTC: 0x08',
     'steps': [ {'inputs': [('PINA',0x00 )],'iterations': 1}, # Set PIN to val then run one iteration
         {'inputs': [('PINA',0x01)], 'iterations': 1}, # Set PIN to val then run 300 ms
-        {'inputs': [('PINA',0x01)], 'iterations': 1}], 
-	{'inputs':[('PINA',0x00)], 'iterations':1}],
+        {'inputs': [('PINA',0x01)], 'iterations': 1}, 
+	{'inputs':[('PINA',0x00)], 'iterations':1},
 	{'inputs':[('PINA',0x02)], 'iterations':1}],
-	{'inputs':[('PINA',0x01)], 'iterations':1}],
-    'expected': [('PORTC',0x08)],
+	#{'inputs':[('PINA',0x01)], 'iterations':1}],
+    'expected': [('PORTC',0x07)],
     },
     ]
 

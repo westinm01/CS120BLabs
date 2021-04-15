@@ -40,9 +40,9 @@ void TickFct(){
 			else if(pa0 && pa1){
                                 state=reset;
                         }			
-			else if(PINC+0x01==0x09){
+			/*else if(PINC==0x08){
 				state=max;
-			}
+			}*/
 			else if (pa0 && !pa1){
 				state=inc;
 			}

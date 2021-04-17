@@ -12,118 +12,54 @@
 #include "simAVRHeader.h"
 #endif
 
-enum STATES {init, inc, incHold, dec, decHold, wait, max, reset} state;
+enum STATES {init, poundHold, poundRelease, unlocked} state;
 
-unsigned char pa0;
-unsigned char pa1;
-unsigned char cdisplay;
+unsigned char pa0;	//X
+unsigned char pa1;	//Y
+unsigned char pa2;	//pound
+unsigned char pa7;	//lock
+
 void TickFct(){
 	switch(state){
 		case init:
-			if(pa0 && !pa1){
-				state=inc;
-			}
-			else if (!pa0 && pa1){
-				state=dec;
-			}
-			else if(pa0 && pa1){
-				state=reset;
+			if(pa2 && !pa0 &&!pa1 &&!pa7){
+				state=poundHold;
 			}
 			else{
-				state=wait;
+				state=init;
 			}
 		break;
-		case inc:
-			if(!pa0 && pa1){
-                                state=dec;
+		case poundHold:
+			if(pa2 && !pa0 && !pa1 && !pa7){
+                                state=poundHold;
                         }
-			else if(pa0 && pa1){
-                                state=reset;
-                        }			
-			/*else if(PINC==0x08){
-				state=max;
-			}*/
-			else if (pa0 && !pa1){
-				state=incHold;
-			}
+			else if(!pa2 && !pa0 && !pa1 && !pa7){
+                                state=poundRelease;
+                        }
+			else if(!pa2 && !pa0 && pa1 &&!pa7){
+				state=unlocked;		
+			}	
 			else{
-				state=wait;
+				state=init;
 			}
 		break;	
-		case incHold:
-			if(!pa0 && pa1){
-				state=dec;
+		case poundRelease:
+			if(pa1 && !pa0 && !pa2 &&!pa7){
+				state=unlocked;
 			}
-			else if(pa0 && !pa1){
-				state=incHold;
-			}
-			else if(pa0 && pa1){
-				state=reset;
+			else if (!pa1 && !pa0 && !pa2 && !pa7){
+				state=poundRelease;
 			}
 			else{
-				state=wait;
+				state=init;
 			}
 		break;
-		case dec:
-			if (pa0 && !pa1){
-                                state=inc;
+		case unlocked:
+			if (pa7){
+                                state=init;
                         }
-			else if( (PINC==0x00)||(pa0 && pa1)){
-				state=reset;
-			}
-			
-			else if(!pa0 && pa1){
-				state=decHold;
-			}
 			else{
-				state=wait;
-			}
-		break;
-		case decHold:
-			if(pa0 && !pa1){
-				state=inc;
-			}
-			else if(pa0 && pa1){
-				state=reset;
-			}
-			else if(!pa0 && pa1){
-				state=decHold;
-			}
-			else{
-				state=wait;
-			}
-			break;
-		case wait:
-			if(pa0 && pa1){
-				state=reset;
-			}
-			else if(pa0 && !pa1){
-				state=inc;
-			}
-			else if(!pa0 && pa1){
-				state=dec;
-			}
-			else{
-				state=wait;
-			}
-		break;
-		case max:
-			if(!pa0 && pa1){
-				state=dec;
-			}
-			else if(pa0 && pa1){
-				state=reset;
-			}
-			else{
-				state=max;
-			}
-		break;
-		case reset:
-			if(pa0 && !pa1){
-				state=inc;
-			}
-			else{
-				state=reset;
+				state=unlocked;
 			}
 		break;
 		default:
@@ -132,26 +68,21 @@ void TickFct(){
 	}
 	switch(state){
 		case init:
-			PORTC=0x07;
+			PORTC=0x00;
+			PORTB=0x00;
 		break;
-		case inc:
-			if(PINC<0x09){
-				PORTC=PINC+0x01;
-			}
+		case poundHold:
+			PORTC=0x01;
+			PORTB=0x00;
 		break;
-		case dec:
-			if(PINC>0x00){
-				PORTC=PINC-0x01;
-			}
+		case poundRelease:
+			PORTC=0x02;
+			PORTB=0x00;
 		break;
-		case wait:
+		case unlocked:
+			PORTC=0x03;
+			PORTB=0x01;
 			
-		break;
-		case max:
-			PORTC=0x09;
-		break;
-		case reset:
-			PORTC=0;
 		break;
 		default:
 		break;
@@ -162,14 +93,16 @@ void TickFct(){
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA=0x00; PORTA=0xFF;
-	DDRC=0xFF; PORTC=0x07;	
+	DDRB=0xFF; PORTB=0x00;
+	DDRC=0xFF; PORTC=0x00;	
 	state= init;
     /* Insert your solution below */
     while (1) {
 	pa0=PINA & 0x01;
 	pa1=(PINA>>1)&0x01;
+	pa2=(PINA>>2)&0x01;
+	pa7=(PINA>>7)&0x01;
 	TickFct();
-	cdisplay=PINC;
     }
     return 1;
 }

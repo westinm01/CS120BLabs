@@ -59,25 +59,26 @@ tests = [ #{'description': 'This test will run first.',
  #   'expected': [('PORTC',0x00)],
  #   },
 #	"""
- {'description': 'A=0x00, A=0x01, A=0x01 ==> PORTC: 0x08',
-    'steps': [ {'inputs': [('PINA',0x00 )],'iterations': 1}, # Set PIN to val then run one iteration
-        {'inputs': [('PINA',0x01)], 'iterations': 1}, # Set PIN to val then run 300 ms
-        {'inputs': [('PINA',0x01)], 'iterations': 1}, 
-	{'inputs':[('PINA',0x00)], 'iterations':1}],
+ {'description': 'Correct Combo, A=0x04,0x02,0x00==> unlocked',
+    'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1}, # Set PIN to val then run one iteration
+        {'inputs': [('PINA',0x02)], 'iterations': 1}, # Set PIN to val then run 300 ms
+        {'inputs': [('PINA',0x00)], 'iterations': 1}],
 	#{'inputs':[('PINA',0x02)], 'iterations':1}],
 	#{'inputs':[('PINA',0x01)], 'iterations':1}],
-    'expected': [('PORTC',0x08)],
+    'expected': [('PORTB',0x01)],
     },
 
- {'description': '0x02...?',
-    'steps': [ {'inputs': [('PINA',0x02)],'iterations': 4}],
-	'expected':[('PORTC',0x07)],
+ {'description': 'A=0x04,0x02,0x80 ==> locked',
+    'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1},
+	{'inputs':[('PINA',0x02)], 'iterations':1},
+	{'inputs':[('PINA',0x00)], 'iterations':1}],
+	'expected':[('PORTB',0x00)],
 	},
     ]
 
 # Optionally you can add a set of "watch" variables these need to be global or static and may need
 # to be scoped at the function level (for static variables) if there are naming conflicts. The 
 # variables listed here will display everytime you hit (and stop at) a breakpoint
-watch = ['state','cdisplay']
+watch = ['state']
 #watch= ['cdisplay']
 

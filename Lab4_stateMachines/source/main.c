@@ -54,7 +54,7 @@ void TickFct(){
 			if (pa0 && !pa1){
                                 state=inc;
                         }
-			else if( PINC=0x00||(pa0 && pa1)){
+			else if( (PINC==0x00)||(pa0 && pa1)){
 				state=reset;
 			}
 			

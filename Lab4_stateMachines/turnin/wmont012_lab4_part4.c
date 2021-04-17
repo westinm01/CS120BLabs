@@ -55,14 +55,14 @@ void TickFct(){
 			}
 		break;
 		case unlocked:
-			if (!pa7){
-                                state=unlocked;
+			if (pa7){
+                                state=init;
                         }
 			if(pa2 && !pa0 &&!pa1 && !pa7){
 				state=unlockedPoundHold;
 			}
 			else{
-				state=init;
+				state=unlocked;
 			}
 		break;
 		case unlockedPoundHold:
@@ -80,7 +80,7 @@ void TickFct(){
 			}
 		break;
 		case unlockedPoundRelease:
-			if(pa1 && !pa0 &&!pa2 ||pa7){
+			if((pa1 && !pa0 &&!pa2) ||pa7){
 				state=init;//locked
 			}
 			else if(!pa1 && !pa0 &&!pa2 &&!pa7){

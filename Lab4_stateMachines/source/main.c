@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum STATES {init, inc, dec, wait, max, reset} state;
+enum STATES {init, inc, incHold, dec, decHold, wait, max, reset} state;
 
 unsigned char pa0;
 unsigned char pa1;
@@ -30,7 +30,7 @@ void TickFct(){
 				state=reset;
 			}
 			else{
-				state=init;
+				state=wait;
 			}
 		break;
 		case inc:
@@ -44,12 +44,26 @@ void TickFct(){
 				state=max;
 			}*/
 			else if (pa0 && !pa1){
-				state=inc;
+				state=incHold;
 			}
 			else{
 				state=wait;
 			}
 		break;	
+		case incHold:
+			if(!pa0 && pa1){
+				state=dec;
+			}
+			else if(pa0 && !pa1){
+				state=incHold;
+			}
+			else if(pa0 && pa1){
+				state=reset;
+			}
+			else{
+				state=wait;
+			}
+		break;
 		case dec:
 			if (pa0 && !pa1){
                                 state=inc;
@@ -59,12 +73,26 @@ void TickFct(){
 			}
 			
 			else if(!pa0 && pa1){
-				state=dec;
+				state=decHold;
 			}
 			else{
 				state=wait;
 			}
 		break;
+		case decHold:
+			if(pa0 && !pa1){
+				state=inc;
+			}
+			else if(pa0 && pa1){
+				state=reset;
+			}
+			else if(!pa0 && pa1){
+				state=decHold;
+			}
+			else{
+				state=wait;
+			}
+			break;
 		case wait:
 			if(pa0 && pa1){
 				state=reset;

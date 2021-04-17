@@ -63,11 +63,16 @@ tests = [ #{'description': 'This test will run first.',
     'steps': [ {'inputs': [('PINA',0x00 )],'iterations': 1}, # Set PIN to val then run one iteration
         {'inputs': [('PINA',0x01)], 'iterations': 1}, # Set PIN to val then run 300 ms
         {'inputs': [('PINA',0x01)], 'iterations': 1}, 
-	{'inputs':[('PINA',0x00)], 'iterations':1},
-	{'inputs':[('PINA',0x02)], 'iterations':1}],
+	{'inputs':[('PINA',0x00)], 'iterations':1}],
+	#{'inputs':[('PINA',0x02)], 'iterations':1}],
 	#{'inputs':[('PINA',0x01)], 'iterations':1}],
-    'expected': [('PORTC',0x07)],
+    'expected': [('PORTC',0x08)],
     },
+
+ {'description': '0x02...?',
+    'steps': [ {'inputs': [('PINA',0x02)],'iterations': 4}],
+	'expected':[('PORTC',0x07)],
+	},
     ]
 
 # Optionally you can add a set of "watch" variables these need to be global or static and may need

@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum STATES {init, poundHold, poundRelease, unlocked} state;
+enum STATES {init, poundHold, poundRelease, unlocked, unlockedPoundHold, unlockedPoundRelease} state;
 
 unsigned char pa0;	//X
 unsigned char pa1;	//Y
@@ -58,8 +58,19 @@ void TickFct(){
 			if (!pa7){
                                 state=unlocked;
                         }
+			if(pa2 && !pa0 &&!pa1 && !pa7){
+				state=unlockedPoundHold;
+			}
 			else{
 				state=init;
+			}
+		break;
+		case unlockedPoundHold:
+			if(pa2 &&!pa0 && !pa1 && !pa7){
+				state=unlockedPoundHold;
+			}
+			else if(!pa2 && !pa0 && !pa1 && !pa7){
+				state=unlockedPoundReleased;
 			}
 		break;
 		default:

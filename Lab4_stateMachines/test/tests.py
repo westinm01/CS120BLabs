@@ -68,17 +68,43 @@ tests = [ #{'description': 'This test will run first.',
     'expected': [('PORTB',0x01)],
     },
 
- {'description': 'A=0x04,0x02,0x80 ==> locked',
-    'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1},
+ {'description': 'Lock Unlock Lock, A=0x84,0x04,0x02,0x80 ==> locked',
+    'steps': [ {'inputs': [('PINA',0x84)],'iterations': 1},
+	{'inputs':[('PINA',0x04)], 'iterations':1},
 	{'inputs':[('PINA',0x02)], 'iterations':1},
-	{'inputs':[('PINA',0x00)], 'iterations':1}],
+	{'inputs':[('PINA',0x80)], 'iterations':1}],
 	'expected':[('PORTB',0x00)],
 	},
+	{'description': 'Incorrect Combo, A=0x04,0x01,0x00==> locked',
+    'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1}, # Set PIN to val then run one iteration
+        {'inputs': [('PINA',0x01)], 'iterations': 1}, # Set PIN to val then run 300 ms
+        {'inputs': [('PINA',0x00)], 'iterations': 1}],
+        #{'inputs':[('PINA',0x02)], 'iterations':1}],
+        #{'inputs':[('PINA',0x01)], 'iterations':1}],
+    'expected': [('PORTB',0x00)],
+    },
+
+	{'description': 'Hold Pound, A=0x04,0x04,0x04==> poundHold',
+    'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1}, # Set PIN to val then run one iteration
+        {'inputs': [('PINA',0x04)], 'iterations': 1}, # Set PIN to val then run 300 ms
+        {'inputs': [('PINA',0x04)], 'iterations': 1}],
+        #{'inputs':[('PINA',0x02)], 'iterations':1}],
+        #{'inputs':[('PINA',0x01)], 'iterations':1}],
+    'expected': [('PORTB',0x00)],
+    },
+	{'description': 'Stay in poundRelease, A=0x04,0x00,0x00==> poundReleased',
+    'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1}, # Set PIN to val then run one iteration
+        {'inputs': [('PINA',0x00)], 'iterations': 1}, # Set PIN to val then run 300 ms
+        {'inputs': [('PINA',0x00)], 'iterations': 1}],
+        #{'inputs':[('PINA',0x02)], 'iterations':1}],
+        #{'inputs':[('PINA',0x01)], 'iterations':1}],
+    'expected': [('PORTB',0x00)],
+    }
     ]
 
 # Optionally you can add a set of "watch" variables these need to be global or static and may need
 # to be scoped at the function level (for static variables) if there are naming conflicts. The 
 # variables listed here will display everytime you hit (and stop at) a breakpoint
-watch = ['state']
+watch = ['state','pa7']
 #watch= ['cdisplay']
 

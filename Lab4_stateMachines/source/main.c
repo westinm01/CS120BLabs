@@ -55,11 +55,11 @@ void TickFct(){
 			}
 		break;
 		case unlocked:
-			if (pa7){
-                                state=init;
+			if (!pa7){
+                                state=unlocked;
                         }
 			else{
-				state=unlocked;
+				state=init;
 			}
 		break;
 		default:

@@ -135,7 +135,7 @@ void TickFct(){
 			PORTC=0x07;
 		break;
 		case inc:
-			if(PINC<0x08){
+			if(PINC<0x09){
 				PORTC=PINC+0x01;
 			}
 		break;
@@ -148,7 +148,7 @@ void TickFct(){
 			
 		break;
 		case max:
-			PORTC=8;
+			PORTC=0x09;
 		break;
 		case reset:
 			PORTC=0;

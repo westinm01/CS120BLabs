@@ -15,28 +15,24 @@
 # that they are not ran in isolation but in the order shown and the state of the device is not reset or 
 # altered in between executions (unless preconditions are used).
 tests = [
- {'description': 'Correct Combo, A=0x04,0x02,0x00==> unlocked',
+ {'description': 'Correct Combo too fast, A=0x04,0x02,0x00==> locked',
     'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1}, # Set PIN to val then run one iteration
         {'inputs': [('PINA',0x02)], 'iterations': 1}, # Set PIN to val then run 300 ms
         {'inputs': [('PINA',0x00)], 'iterations': 1}],
 	#{'inputs':[('PINA',0x02)], 'iterations':1}],
 	#{'inputs':[('PINA',0x01)], 'iterations':1}],
-    'expected': [('PORTB',0x01),('PORTC',0x03)],
+    'expected': [('PORTB',0x00),('PORTC',0x00)],
     },
 
- {'description': 'Lock Unlock Lock, A=0x84,0x04,0x02,0x80 ==> locked',
+ {'description': 'Random then unlock, A=0x84,0x04,0x00,0x02 ==> unlocked',
     'steps': [ {'inputs': [('PINA',0x84)],'iterations': 1},
 	{'inputs':[('PINA',0x04)], 'iterations':1},
-	{'inputs':[('PINA',0x02)], 'iterations':1},
-	{'inputs':[('PINA',0x80)], 'iterations':1}],
-	'expected':[('PORTB',0x00),('PORTC',0x00)],
+	{'inputs':[('PINA',0x00)], 'iterations':1},
+	{'inputs':[('PINA',0x02)], 'iterations':1}],
+	'expected':[('PORTB',0x01),('PORTC',0x03)],
 	},
-	{'description': 'Incorrect Combo, A=0x04,0x01,0x00==> locked',
-    'steps': [ {'inputs': [('PINA',0x04)],'iterations': 1}, # Set PIN to val then run one iteration
-        {'inputs': [('PINA',0x01)], 'iterations': 1}, # Set PIN to val then run 300 ms
-        {'inputs': [('PINA',0x00)], 'iterations': 1}],
-        #{'inputs':[('PINA',0x02)], 'iterations':1}],
-        #{'inputs':[('PINA',0x01)], 'iterations':1}],
+	{'description': 'Lock, A=0x80==> locked',
+    'steps': [ {'inputs': [('PINA',0x80)],'iterations': 1}],
     'expected': [('PORTB',0x00),('PORTC',0x00)],
     },
 

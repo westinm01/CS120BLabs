@@ -36,9 +36,9 @@ void TickFct(){
 			else if(!pa2 && !pa0 && !pa1 && !pa7){
                                 state=poundRelease;
                         }
-			else if(!pa2 && !pa0 && pa1 &&!pa7){
-				state=unlocked;		
-			}	
+			//else if(!pa2 && !pa0 && pa1 &&!pa7){
+			//	state=unlocked;		
+			//}	
 			else{
 				state=init;
 			}
